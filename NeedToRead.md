@@ -5,7 +5,12 @@
 * russian clustering https://fruct.org/publications/ISMW-FRUCT-2016/files/Bod.pdf
 * conll 2012 http://www.aclweb.org/anthology/W12-4501
 * Allen end-to-end https://arxiv.org/pdf/1707.07045.pdf
-
+* Allen 2 https://arxiv.org/pdf/1804.05392.pdf
+* Error analysis for anaphora resolution in Russian http://www.aclweb.org/anthology/W16-0711
+* CoreferenCe resolution in russian: state-of-the-art approaChes appliCation and evolvement Sysoev A. A. Andrianov I. A. Khadzhiiskaia A. Y.
+* Anaphoric Annotation and corpus-based anaphora resolution: An experiment. Saint Petersburg State University + OpenCorpora.org
+* Data-Driven MethoDs for anaphora resolution of russian texts. Peoples’ Friendship University of Russia + Institute for Systems Analysis of RA
+* AnAphorA AnAlysis bAsed on Abbyy Compreno linguistiC teChnologies
 ## Метрики
 
 #Syntactic
