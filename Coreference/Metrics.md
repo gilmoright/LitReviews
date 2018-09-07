@@ -2,33 +2,33 @@
 Метрика, основанная на ссылках.
 **Recall** = Для всех сущностей k_i в gold разметке K и для всех совпадающих с ними сущностями r_i в выдаче системы R считается количество потерянных ссылок и делится на количество ссылок между сущностями в разметке K. Summ_(k_i in K) (|k_i| - |p(k_i)|) / Summ_(k_i in K) (|k_i| - 1) . p(k_i) - пересечение ссылок k_i и r_i
 **Precision** = количество ссылок которые есть в R но нет в K, делённое на количество ссылок в R. по сути - recall с заменой k_i на r_i
-$inline$
  - Для muc нет разницы, если добавлена неправильная ссылка между двумя одиночными сущностями или двумя сущностями, имеющими кучу других связей. Хотя во втором случае, эта ошибка гораздо серьёзней.
  - Метрика чрещмерно поощряет соединение сущностей, если соединить все правильно выделенные сущности между собой, MUC recall может быть 100%, и F1 соответственно тоже будет завышена.
 # B^3
-B-cubed is entity-oriented cross-document coreferencing measure ([Bagga and 
-Baldwin, 1998]). B-cube is a more complicated harmonic mean of recall a nd precision.
-To compute B3 one needs to compute the recalli and precisioni for each mention, 
-and then to take an average of these pre-recall and pre-precision values to obtain the 
-overall recall and precision.
-Mention precision is a number of correct elements in the system output chain 
-containing the mention divided by the number of elements in the system output chain 
-containing the mentioni
-Mention recalli  is a number of correct elements in the system output chain con-
-taining the mention divided by the number of elements in the golden standard chain 
-containing the mentioni.
-Hence, to compute overall recall and overall precision you need to average all 
-mention recalls and mention precision respectively.
+Метрика основана на упоминаниях, итоговые precision и recall расчитываются на основе precision и recall каждого упоминания. В исходной разметке K в тексте есть упоминания, несколько упоминаний могут означать одну сущность. Так вот для каждого упоминания m какой-либо сущности из K разметки B^3 recall это доля правильных упоминаний из всех упоминаний сущности к которой относится m в разметке R. 
+Summ_(k_i in K) Summ_(r_j in R) (|k_i & r_j|^2 / k_i)  / Summ_(k_i in K) (|k_i|)
+Здесь под k_i, видимо понимается не само упоминание, а другие упоминания в одной сущности данным. Соответственно |k_i & r_j| - количество упоминаний правильно отнесённых к одной сущности с данным. 
+Precision вычисляется сменой ролей k_i на r_i
+ - если система не будет объединять упоминания вообще, Precision = 100%
+ - если система объединит все упоминания в одну сущность, Recall = 100%
+ - если упоминание из gold разметки будет привязано к нескольким сущностям в response разметке, B^3 может увеличиться за каждую из этих сущностей
 # CEAF
-In [Luo 2005] it was shown the main problem of B3 algorithm: B3 may use all chains 
-more than once when computing recall and precision. Luo proposes 2 metrics which 
-aligns entities in golden standard and system output. First of all CEAF requires the estab-
-lishing of all one-to-one corresponding alignments between the chains in G(d) and the 
-chain s in S(d). CEA F uses the funct ion j to compute t he similarit y between Gi and Sj where 
-Gi and Sj are the chains from golden standard and system output respectively. Further-
-more, the algorithm proposes the best alignment using the Kuhn-Munkres algorithm 
+Использует функцию близости (FI) двух сущностей  и алгоритм Kuhn-Munkres для определения оптимальных соответствий между сущностями эталонной разметки и ответа системы (g*)
+**Recall** = Summ_(k_i in K*) FI(k_i, g*(k_i)) / Summ_(k_i in K) FI(k_i, k_i)
+где K* - сущности эталонной разметки, которым было найдено оптимальное соответствие
+Для **Precision** знаменатель меняется на Summ_(r_i in R) FI(r_i, r_i)
+Есть 2 разновидности CEAF метрики, в зависимости от FI
 ## CEAF_M
+Mention-based CEAF, считает близость между сущностями на основе количества общих упоминаний FI(k_i, r_j) = |k_i & r_j|
 ## CEAF_E
+entity-based. Здесь FI(k_i, r_j) = (2* |k_i & r_j|) / (|k_i| + |r_j|), а при расчёте recall и precision, знаменатель - количество сущностей в эталонной разметке.
 
+# BLANC
+
+# LEA
+
+# Ссылки
+есть ещё разные вариации B^3 и CEAF но мне лень сейчас их разбирать, есть по ссылкам:
  - Which Coreference Evaluation Metric Do You Trust? A Proposal for a Link-based Entity Aware Metric (https://www.aclweb.org/anthology/P16-1060)
  - Evaluation Metrics For End-to-End Coreference Resolution Systems (http://www.aclweb.org/anthology/W10-4305)
+
